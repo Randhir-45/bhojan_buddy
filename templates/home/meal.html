@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BhojanBuddy - Your Personal Meal Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8f7ff;
+      }
+      .meal-card {
+        transition: all 0.3s ease;
+      }
+      .meal-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .date-picker::-webkit-calendar-picker-indicator {
+        filter: invert(0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen">
+      <!-- Header -->
+      <header
+        class="bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg"
+      >
+        <div class="container mx-auto px-4 py-6">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 w-10 mr-3"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+              <h1 class="text-3xl font-bold">BhojanBuddy</h1>
+            </div>
+          </div>
+          <p class="mt-2 text-white/90">
+            Your personal meal planning assistant
+          </p>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="container mx-auto px-4 py-8 max-w-3xl">
+  <form method="POST" class="bg-white rounded-xl shadow-md p-6 mb-6 space-y-6">
+    {% csrf_token %}
+    <!-- Date Picker -->
+    <div class="mb-6">
+      <label
+        for="date"
+        class="block text-lg font-semibold text-gray-800 mb-2"
+        >Select Date:</label
+      >
+      <input
+        type="date"
+        id="date"
+        name="date"
+        value="{{ selected_date }}"
+        class="date-picker w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-700"
+        onchange="changeDate(this.value)"
+      />
+    </div>
+
+    <!-- Display Selected Date -->
+    <div class="text-center mb-4">
+      <h2 class="text-xl font-bold text-orange-600">{{ selected_date|date:"d-m-Y" }}</h2>
+    </div>
+
+    <!-- Meal Inputs -->
+    <div class="space-y-6">
+      <!-- Breakfast -->
+      <div class="meal-card bg-orange-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-orange-600 mb-2">Breakfast</h3>
+        <input
+          type="text"
+          name="breakfast"
+          value="{{ meal.breakfast }}"
+          placeholder="Enter breakfast..."
+          class="w-full border px-4 py-2 rounded"
+        />
+      </div>
+
+      <!-- Lunch -->
+      <div class="meal-card bg-orange-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-orange-600 mb-2">Lunch</h3>
+        <input
+          type="text"
+          name="lunch"
+          value="{{ meal.lunch }}"
+          placeholder="Enter lunch..."
+          class="w-full border px-4 py-2 rounded"
+        />
+      </div>
+
+      <!-- Snacks -->
+      <div class="meal-card bg-orange-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-orange-600 mb-2">Snacks</h3>
+        <input
+          type="text"
+          name="snacks"
+          value="{{ meal.snacks }}"
+          placeholder="Enter snacks..."
+          class="w-full border px-4 py-2 rounded"
+        />
+      </div>
+
+      <!-- Dinner -->
+      <div class="meal-card bg-orange-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-orange-600 mb-2">Dinner</h3>
+        <input
+          type="text"
+          name="dinner"
+          value="{{ meal.dinner }}"
+          placeholder="Enter dinner..."
+          class="w-full border px-4 py-2 rounded"
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-8 flex justify-center">
+      <button
+        type="submit"
+        class="bg-orange-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-orange-600 transition duration-300 flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+          />
+        </svg>
+        Save
+      </button>
+    </div>
+  </form>
+</main>
+
+        <!-- Calendar View -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Upcoming Meals
+          </h2>
+          <div class="grid grid-cols-7 gap-2 mb-2">
+            <div class="text-center text-sm font-medium text-gray-500">Mon</div>
+            <div class="text-center text-sm font-medium text-gray-500">Tue</div>
+            <div class="text-center text-sm font-medium text-gray-500">Wed</div>
+            <div class="text-center text-sm font-medium text-gray-500">Thu</div>
+            <div class="text-center text-sm font-medium text-gray-500">Fri</div>
+            <div class="text-center text-sm font-medium text-gray-500">Sat</div>
+            <div class="text-center text-sm font-medium text-gray-500">Sun</div>
+          </div>
+          <div class="grid grid-cols-7 gap-2">
+            <div class="text-center p-2 text-gray-400">25</div>
+            <div
+              class="text-center p-2 bg-orange-100 rounded-lg font-medium text-orange-600"
+            >
+              26
+            </div>
+            <div class="text-center p-2 text-gray-800">27</div>
+            <div class="text-center p-2 text-gray-800">28</div>
+            <div class="text-center p-2 text-gray-800">29</div>
+            <div class="text-center p-2 text-gray-800">30</div>
+            <div class="text-center p-2 text-gray-800">31</div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Meal Edit Modal -->
+    <div
+      id="meal-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-xl p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+          <h3 id="modal-title" class="text-xl font-semibold text-gray-800">
+            Edit Meal
+          </h3>
+          <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="mb-4">
+          <label
+            for="meal-content"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Meal Details</label
+          >
+          <textarea
+            id="meal-content"
+            rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          ></textarea>
+        </div>
+        <div class="flex justify-end">
+          <button
+            id="save-meal"
+            class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Date handling
+      const dateInput = document.getElementById("date-select");
+      dateInput.addEventListener("change", (e) => {
+        const selectedDate = new Date(e.target.value);
+        const formattedDate = `${String(selectedDate.getDate()).padStart(
+          2,
+          "0"
+        )}-${String(selectedDate.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}-${selectedDate.getFullYear()}`;
+        document.querySelector("h2.text-xl").textContent = formattedDate;
+      });
+
+      // Modal functionality
+      const modal = document.getElementById("meal-modal");
+      const closeModal = document.getElementById("close-modal");
+      let currentMealType = null;
+
+      // Open modal when edit button is clicked
+      document.querySelectorAll(".edit-meal").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const mealCard = e.target.closest(".meal-card");
+          const mealType = mealCard.querySelector("h3").textContent;
+          const mealContent = mealCard.querySelector("p").textContent;
+
+          document.getElementById(
+            "modal-title"
+          ).textContent = `Edit ${mealType}`;
+          document.getElementById("meal-content").value = mealContent;
+
+          currentMealType = mealType.toLowerCase();
+          modal.classList.remove("hidden");
+        });
+      });
+
+      // Close modal
+      closeModal.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      // Save meal changes
+      document.getElementById("save-meal").addEventListener("click", () => {
+        if (currentMealType) {
+          const mealContent = document.getElementById("meal-content").value;
+          document.getElementById(
+            `${currentMealType.toLowerCase()}-text`
+          ).textContent = mealContent;
+          modal.classList.add("hidden");
+        }
+      });
+
+      // Save button functionality
+      document.getElementById("save-btn").addEventListener("click", () => {
+        // Animation to show saving
+        const saveBtn = document.getElementById("save-btn");
+        const originalText = saveBtn.innerHTML;
+
+        saveBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+            `;
+
+        setTimeout(() => {
+          saveBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Saved!
+                `;
+
+          setTimeout(() => {
+            saveBtn.innerHTML = originalText;
+          }, 1500);
+        }, 1000);
+      });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'944bfadbe05a8fcd',t:'MTc0ODA4MTE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+  function changeDate(date) {
+    const baseUrl = "{% url 'meal_planner' %}";
+    window.location.href = `${baseUrl}?date=${date}`;
+  }
+
+    </script>
+  </body>
+</html>
