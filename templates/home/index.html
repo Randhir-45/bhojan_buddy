@@ -78,6 +78,12 @@
       <div class="flex items-center space-x-3">
         <button
           class="hidden md:block px-5 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition duration-300 btn-hover"
+          onclick="window.location.href='{% url 'blog' %}'"
+        >
+          Blog
+        </button>
+        <button
+          class="hidden md:block px-5 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition duration-300 btn-hover"
           onclick="window.location.href='{% url 'spoonacular' %}'"
         >
           Recipe
@@ -144,14 +150,21 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-6">
+          {% if request.user.is_authenticated %}
           <button
             class="orange-bg text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-opacity-90 transition duration-300 btn-hover"
             onclick="window.location.href='{% url 'meal_planner' %}'"
           >
             Start Planning Today
           </button>
-
-          {% if not request.user.is_authenticated %}
+          {% else %}
+          <button
+            class="orange-bg text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-opacity-90 transition duration-300 btn-hover"
+            onclick="window.location.href='{% url 'login_view' %}'"
+          >
+            Start Planning Today
+          </button>
+          {% endif %} {% if not request.user.is_authenticated %}
           <button
             class="bg-white text-gray-700 px-8 py-3 rounded-full font-semibold text-lg border border-gray-300 hover:bg-gray-50 transition duration-300 btn-hover"
             onclick="window.location.href='{% url 'login_view' %}'"

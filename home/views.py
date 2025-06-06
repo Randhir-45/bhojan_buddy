@@ -72,3 +72,6 @@ def meal_plan_view(request):
 
 def spoonacular(request):
     return render(request,'home/spoonacular.html')
+
+def blog(request):
+    return render(request,"home/blog.html")

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Bhojan Buddy - Meal Planning Made Easy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #fff8f0;
+      }
+
+      .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .recipe-item {
+        transition: transform 0.2s ease, color 0.2s ease;
+      }
+
+      .recipe-item:hover {
+        transform: translateX(5px);
+        color: #e07a5f;
+      }
+
+      .search-btn {
+        transition: background-color 0.3s ease;
+      }
+
+      .search-btn:hover {
+        background-color: #d65940;
+      }
+
+      .loader {
+        border-top-color: #e07a5f;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow-lg"
+    >
+      <div class="container mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center mb-4 md:mb-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 mr-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"
+                clip-rule="evenodd"
+              />
+              <path
+                d="M10 4a1 1 0 011 1v5a1 1 0 01-1 1 1 1 0 01-1-1V5a1 1 0 011-1z"
+              />
+              <path
+                d="M10 10a1 1 0 011 1v1a1 1 0 01-1 1 1 1 0 01-1-1v-1a1 1 0 011-1z"
+              />
+            </svg>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold">The Bhojan Buddy</h1>
+              <p class="text-sm md:text-base">
+                Your Personal Meal Planning Assistant
+              </p>
+            </div>
+          </div>
+          <nav>
+            <ul class="flex space-x-4 md:space-x-8">
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-amber-200 transition-colors duration-200"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-amber-200 transition-colors duration-200"
+                  >Recipes</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-amber-200 transition-colors duration-200"
+                  >Meal Plans</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-amber-200 transition-colors duration-200"
+                  >About</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Hero Section -->
+      <section
+        class="bg-gradient-to-r from-amber-100 to-orange-100 rounded-2xl p-6 md:p-10 mb-10 shadow-md"
+      >
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-2/3 mb-6 md:mb-0 md:pr-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-amber-800 mb-4">
+              Find Delicious Recipe Videos
+            </h2>
+            <p class="text-lg text-amber-700 mb-6">
+              Search for cooking videos and get inspired for your next meal.
+              From quick weeknight dinners to elaborate weekend feasts, find it
+              all here!
+            </p>
+
+            <!-- YouTube Search Bar -->
+            <div class="relative">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search for recipes (e.g., 'healthy dinner recipes')"
+                class="w-full px-5 py-3 rounded-full border-2 border-amber-300 focus:border-amber-500 focus:outline-none shadow-sm"
+              />
+              <button
+                id="searchButton"
+                class="search-btn absolute right-1 top-1 bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors duration-300"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+          <div class="md:w-1/3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-full h-auto"
+              viewBox="0 0 100 100"
+            >
+              <circle cx="50" cy="50" r="45" fill="#FFECD1" />
+              <path
+                d="M30,35 C30,25 40,20 50,20 C60,20 70,25 70,35 C70,45 60,60 50,60 C40,60 30,45 30,35"
+                fill="#FF9F1C"
+              />
+              <path
+                d="M30,70 L70,70 C70,80 60,85 50,85 C40,85 30,80 30,70"
+                fill="#E07A5F"
+              />
+              <circle cx="40" cy="40" r="5" fill="#FFECD1" />
+              <circle cx="60" cy="40" r="5" fill="#FFECD1" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading Indicator -->
+      <div id="loadingIndicator" class="hidden flex justify-center my-8">
+        <div
+          class="loader border-4 border-amber-200 border-t-4 rounded-full w-12 h-12"
+        ></div>
+      </div>
+
+      <!-- Video Results Section -->
+      <section id="videoResults" class="mb-12 hidden">
+        <h2
+          class="text-2xl font-bold text-amber-800 mb-6 border-b-2 border-amber-300 pb-2"
+        >
+          Video Results
+        </h2>
+        <div
+          id="videoContainer"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <!-- Videos will be inserted here by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Featured Recipes Section -->
+      <section class="bg-white rounded-2xl p-6 md:p-8 shadow-md">
+        <h2
+          class="text-2xl font-bold text-amber-800 mb-6 border-b-2 border-amber-300 pb-2"
+        >
+          Featured Recipes
+        </h2>
+        <h3
+          class="text-2xl  text-amber-800 mb-6 border-b-2 border-amber-300 pb-2"
+        >
+          
+          <ul >
+            <li> &nbsp; &nbsp;Vegetarian</li>
+          </ul>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+          <div>
+            <ul class="space-y-4">
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="gYE9zOmJwsg"
+              >
+                <span class="text-amber-600 mr-3">🍛</span>
+                <span class="font-medium">Vegetable Biryani</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="7yop_KC4kPI"
+              >
+                <span class="text-amber-600 mr-3">🥘</span>
+                <span class="font-medium"
+                  >Masala Dosa with Coconut Chutney</span
+                >
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="iRG6GSn8xOo"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Palak Paneer</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="VVhs1wj9DhU"
+              >
+                <span class="text-amber-600 mr-3">🥮</span>
+                <span class="font-medium">Gulab Jamun</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="8N0mLlGU2uQ"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Kadhai Mushroom Masala</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="space-y-4">
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="WnkTTvAVisU"
+              >
+                <span class="text-amber-600 mr-3">🍞</span>
+                <span class="font-medium">Homemade Naan Bread</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="Cc397XzpvUg"
+              >
+                <span class="text-amber-600 mr-3">🥗</span>
+                <span class="font-medium">Kachumber Salad</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="BuBvuquLfAc"
+              >
+                <span class="text-amber-600 mr-3">🍚</span>
+                <span class="font-medium">Jeera Rice</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="PhgyyJE90w8"
+              >
+                <span class="text-amber-600 mr-3">🥔</span>
+                <span class="font-medium">Aloo Gobi</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="EtyVAp3mVQ0"
+              >
+                <span class="text-amber-600 mr-3">🍹</span>
+                <span class="font-medium">Mango Lassi</span>
+              </li>
+            </ul>
+          </div>
+          
+        </div>
+      </section>
+            <section class="bg-white rounded-2xl p-6 md:p-8 shadow-md">
+        <h2
+          class="text-2xl  text-amber-800 mb-6 border-b-2 border-amber-300 pb-2"
+        >
+          Non-Vegetarian 
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+          <div>
+            <ul class="space-y-4">
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="aleED1mc5kI"
+              >
+                <span class="text-amber-600 mr-3">🍛</span>
+                <span class="font-medium">chicken Biryani</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="XyCOgOFMLiM"
+              >
+                <span class="text-amber-600 mr-3">🥘</span>
+                <span class="font-medium"
+                  >Mutton Curry | Mutton Masala Gravy</span
+                >
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="UxGn5yEf-hs"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Fish Pakora</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="b7yuoRk227Y"
+              >
+                <span class="text-amber-600 mr-3">🥮</span>
+                <span class="font-medium">Butter chicken</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="RB1ZOlRIw0o"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Fish Curry</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="space-y-4">
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="T6_qjgYVC3o"
+              >
+                <span class="text-amber-600 mr-3">🍞</span>
+                <span class="font-medium">chicken chettinad</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="0lFHJe3RK0c"
+              >
+                <span class="text-amber-600 mr-3">🥗</span>
+                <span class="font-medium">Tandoori Chicken</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="y7QrxYmJp7o"
+              >
+                <span class="text-amber-600 mr-3">🍚</span>
+                <span class="font-medium">Andhra chilli chicken</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="pqGMxHIfcXg"
+              >
+                <span class="text-amber-600 mr-3">🥔</span>
+                <span class="font-medium">Egg curry</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="gEL_wmP7uE8"
+              >
+                <span class="text-amber-600 mr-3">🍹</span>
+                <span class="font-medium">Kadhai Chicken</span>
+              </li>
+            </ul>
+          </div>
+          
+        </div>
+      </section>
+      <section class="bg-white rounded-2xl p-6 md:p-8 shadow-md">
+        <h2
+          class="text-2xl  text-amber-800 mb-6 border-b-2 border-amber-300 pb-2"
+        >
+          Desserts
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+          <div>
+            <ul class="space-y-4">
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="VVhs1wj9DhU"
+              >
+                <span class="text-amber-600 mr-3">🍛</span>
+                <span class="font-medium">Gulab jamun</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="QLPo1bRY1hY"
+              >
+                <span class="text-amber-600 mr-3">🥘</span>
+                <span class="font-medium"
+                  >Rasgulla</span
+                >
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="0w471_wMPP0"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Jalebi</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="878WHgjtoMo"
+              >
+                <span class="text-amber-600 mr-3">🥮</span>
+                <span class="font-medium">Kheer</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="9mm8my_NLlY"
+              >
+                <span class="text-amber-600 mr-3">🍲</span>
+                <span class="font-medium">Rasmalai</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="space-y-4">
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="WnkTTvAVisU"
+              >
+                <span class="text-amber-600 mr-3">🍞</span>
+                <span class="font-medium">Ladoo</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="Cc397XzpvUg"
+              >
+                <span class="text-amber-600 mr-3">🥗</span>
+                <span class="font-medium">Barfi</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="BuBvuquLfAc"
+              >
+                <span class="text-amber-600 mr-3">🍚</span>
+                <span class="font-medium">Halwa</span>
+              </li>
+              
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="PhgyyJE90w8"
+              >
+                <span class="text-amber-600 mr-3">🥔</span>
+                <span class="font-medium">Rabri</span>
+              </li>
+              <li
+                class="recipe-item flex items-center p-3 border-l-4 border-amber-400 bg-amber-50 rounded-r-lg cursor-pointer"
+                data-video-id="EtyVAp3mVQ0"
+              >
+                <span class="text-amber-600 mr-3">🍹</span>
+                <span class="font-medium">Shrikhand</span>
+              </li>
+            </ul>
+          </div>
+          
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-amber-800 text-white mt-12 py-8">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between">
+          <div class="mb-6 md:mb-0">
+            <h3 class="text-xl font-bold mb-3">The Bhojan Buddy</h3>
+            <p class="text-amber-200">Your personal meal planning assistant</p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div>
+              <h4 class="font-semibold mb-3 text-amber-100">Quick Links</h4>
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Recipes</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Meal Plans</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3 text-amber-100">Resources</h4>
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Blog</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Cooking Tips</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Nutrition Guide</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3 text-amber-100">Connect</h4>
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >Contact Us</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >About</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-amber-200 hover:text-white transition-colors duration-200"
+                    >FAQ</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div
+          class="border-t border-amber-700 mt-8 pt-6 text-center text-amber-300"
+        >
+          <p>&copy; 2023 The Bhojan Buddy. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const searchButton = document.getElementById("searchButton");
+        const videoContainer = document.getElementById("videoContainer");
+        const videoResults = document.getElementById("videoResults");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+
+        // Sample data to display when API key is not provided
+        const sampleVideos = [
+          {
+            id: { videoId: "dQw4w9WgXcQ" },
+            snippet: {
+              title: "Easy Vegetable Curry Recipe",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Vegetable+Curry",
+                },
+              },
+              channelTitle: "Indian Cooking Channel",
+            },
+          },
+          {
+            id: { videoId: "xvFZjo5PgG0" },
+            snippet: {
+              title: "Homemade Naan Bread - No Oven Needed",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Naan+Bread",
+                },
+              },
+              channelTitle: "Easy Recipes",
+            },
+          },
+          {
+            id: { videoId: "dQw4w9WgXcQ" },
+            snippet: {
+              title: "Butter Chicken Masala - Restaurant Style",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Butter+Chicken",
+                },
+              },
+              channelTitle: "Chef Ranveer",
+            },
+          },
+          {
+            id: { videoId: "xvFZjo5PgG0" },
+            snippet: {
+              title: "Perfect Biryani - Step by Step Guide",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Biryani",
+                },
+              },
+              channelTitle: "Cooking with Sharmila",
+            },
+          },
+          {
+            id: { videoId: "dQw4w9WgXcQ" },
+            snippet: {
+              title: "Quick and Easy Dal Tadka",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Dal+Tadka",
+                },
+              },
+              channelTitle: "Veg Recipes of India",
+            },
+          },
+          {
+            id: { videoId: "xvFZjo5PgG0" },
+            snippet: {
+              title: "Homemade Paneer - Indian Cottage Cheese",
+              thumbnails: {
+                medium: {
+                  url: "https://via.placeholder.com/320x180.png?text=Homemade+Paneer",
+                },
+              },
+              channelTitle: "Cook with Kabita",
+            },
+          },
+        ];
+
+        // Function to search YouTube videos
+        async function searchYouTubeVideos(query) {
+          loadingIndicator.classList.remove("hidden");
+          videoResults.classList.add("hidden");
+
+          try {
+            // Replace 'YOUR_API_KEY' with your actual YouTube Data API key
+            const apiKey = "AIzaSyCfuKUiGTkbh-fGjAJLJBtfTaVssNSmJ3E";
+
+            // If API key is not provided, use sample data
+            if (apiKey === "AIzaSyCfuKUiGTkbh-fGjAJLJBtfTaVssNSmJ3E") {
+              // Simulate API delay
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              displayVideos(sampleVideos);
+              return;
+            }
+
+            const response = await fetch(
+              `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=6&q=${encodeURIComponent(
+                query + " recipe"
+              )}&type=video&key=${apiKey}`
+            );
+            const data = await response.json();
+
+            if (data.items && data.items.length > 0) {
+              displayVideos(data.items);
+            } else {
+              videoContainer.innerHTML =
+                '<p class="col-span-3 text-center text-gray-600">No videos found. Try a different search term.</p>';
+              videoResults.classList.remove("hidden");
+            }
+          } catch (error) {
+            console.error("Error fetching YouTube videos:", error);
+            videoContainer.innerHTML =
+              '<p class="col-span-3 text-center text-red-600">Error fetching videos. Please try again later.</p>';
+            videoResults.classList.remove("hidden");
+          } finally {
+            loadingIndicator.classList.add("hidden");
+          }
+        }
+
+        // Function to display videos
+        function displayVideos(videos) {
+          videoContainer.innerHTML = "";
+
+          videos.forEach((video) => {
+            const videoId = video.id.videoId;
+            const title = video.snippet.title;
+            const thumbnail = video.snippet.thumbnails.medium.url;
+            const channelTitle = video.snippet.channelTitle;
+
+            const videoCard = document.createElement("div");
+            videoCard.className =
+              "card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg";
+            videoCard.innerHTML = `
+                        <div class="relative">
+                            <img src="${thumbnail}" alt="${title}" class="w-full h-48 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                                <div class="p-4">
+                                    <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-md">YouTube</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2 line-clamp-2">${title}</h3>
+                            <p class="text-gray-600 text-sm mb-3">${channelTitle}</p>
+                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="block text-center bg-amber-500 hover:bg-amber-600 text-white py-2 px-4 rounded-lg transition-colors duration-300">Watch Video</a>
+                        </div>
+                    `;
+
+            videoContainer.appendChild(videoCard);
+          });
+
+          videoResults.classList.remove("hidden");
+        }
+
+        // Event listeners
+        searchButton.addEventListener("click", () => {
+          const query = searchInput.value.trim();
+          if (query) {
+            searchYouTubeVideos(query);
+          }
+        });
+
+        searchInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            const query = searchInput.value.trim();
+            if (query) {
+              searchYouTubeVideos(query);
+            }
+          }
+        });
+
+        // Handle featured recipe clicks
+        document.querySelectorAll(".recipe-item").forEach((item) => {
+          item.addEventListener("click", () => {
+            const videoId = item.getAttribute("data-video-id");
+            window.open(`https://www.youtube.com/watch?v=${videoId}`, "_blank");
+          });
+        });
+      });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'945ba3f596fa9a93',t:'MTc0ODI0NTM5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
